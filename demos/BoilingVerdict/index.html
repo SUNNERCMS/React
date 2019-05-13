@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Boiling verdict</title>
+<script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+<script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+<script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+    // function Boilingverdict(props){
+    //     return ({props.celsius>100?(<p>水会烧开奥</p>):(<p>水不会烧开的</P>)});
+    // }
+    function Boilingverdict(props) {
+        if (props.celsius >= 100) {
+            return <p>水会烧开</p>;
+        }
+        return <p>水不会烧开</p>;
+    }
+     class Calculate extends React.Component {
+        constructor (props){
+            super(props);
+            this.state={temperature:""};
+            this.handleChange=this.handleChange.bind(this);
+        }
+        handleChange(e){
+            this.setState({temperature:e.target.value});
+        }
+        render(){
+            let currenttemperature=this.state.temperature;
+            return(
+                <fieldset>
+                    <legend>输入一个摄氏温度</legend>
+                    <input value={currenttemperature} onChange={this.handleChange}/>
+                    <Boilingverdict celsius={parseFloat(currenttemperature)}/>
+                </fieldset>
+            );
+        }
+     } 
+     ReactDOM.render(
+         <Calculate/>,
+         document.getElementById("example")
+     );
+    </script>
+ 
+</body>
+</html>
