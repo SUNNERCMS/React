@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+    // 文本显示组件
+    function LoginText() {
+        return <h1>请登录！</h1>;
+    }
+    function LogoutText() {
+        return <h1>已经处于登录后的界面！可以登出！</h1>;
+    }
+
+    // 登录组件,该组件的点击处理函数由外围传入，通过props.onClick调用
+    function LoginButton(props){
+        return (
+            <button onClick={props.onClick}>登录</button>
+        );
+    }
+    // 登出组件
+    function LogoutButton(props){
+        return (
+            <button onClick={props.onClick}>登出</button>
+        );
+    }
+    
+    // 控制组件，根据状态值控制使用哪个组件
+    class LoginControl extends React.Component{
+        constructor(props){
+            super(props);
+            this.handleLoginClick = this.handleLoginClick.bind(this);
+            this.handleLogoutClick=this.handleLogoutClick.bind(this);
+            this.state={isLoggedIn:true};
+        }
+        //登录处理函数,将该处理函数作为属性值传递给了按钮组件中onclick属性，用于点击改变状态值。
+        handleLoginClick(){
+            this.setState({isLoggedIn:false});
+        }
+        //登出处理函数
+        handleLogoutClick(){
+            this.setState({isLoggedIn:true});
+        }
+        render(){
+            const isLoggedIn=this.state.isLoggedIn;
+            // 采用了变量来存储元素。
+            let button=null;
+            let greeting=null;
+            greeting = isLoggedIn ? <LoginText/> : <LogoutText/>;
+            button   = isLoggedIn ? <LoginButton onClick={this.handleLoginClick}/> : <LogoutButton onClick={this.handleLogoutClick}/>;
+            return(
+                <div>
+                    {greeting}
+                    {button}
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <LoginControl />,
+        document.getElementById("root")
+    );
+    </script>
+  </body>
+</html>
