@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>表单受控组件</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      class NameForm extends React.Component{
+          constructor(props){
+              super(props);
+              this.state={value:''};
+              this.handleChange=this.handleChange.bind(this);
+              this.handleSubmit=this.handleSubmit.bind(this);
+          }
+        //input输入框改变事件：将input改变的输入值实时赋值该组件状态值。
+          handleChange(e){
+              this.setState({value:e.target.value});
+          }
+        //表单提交事件
+          handleSubmit(e){
+              e.preventDefault();//阻止表单提交时，自动跳转的默认时间，在这里也即是仅显示提示信息，不跳转
+              alert("提交的名字是："+this.state.value);
+          }
+          render(){
+              return (
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        名字：
+                        <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                    </label>
+                    <input type="submit" value="提交"/>
+                </form>
+              );
+          }
+      }
+        ReactDOM.render(<NameForm/>,document.querySelector("#root"));
+    </script>
+
+  </body>
+</html>

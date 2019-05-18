@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>状态提升</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+    
+        const scaleNames={
+                c:"Celsius",
+                f:"Fahrenheit"
+        };
+
+        function BoilingVerdict(props){
+          if(props.celsius>=100){
+            return <p>水开了！</p>;
+          }else{
+            return <p>水没开！</p>;
+          }
+        }
+        // 将华氏度转换为摄氏度
+        function toCelsius(fahrenheit){
+          return (fahrenheit-32)*5/9;
+        }
+        // 将摄氏度转换为华氏度
+        function toFahrenheit(celsius){
+          return (celsius*9/5)+32;
+        }
+        // 转换函数，将拿到的温度值进行转换，至于是使用哪个转换函数，要看传进来的是哪个
+        function tryConvert(temperature,convert){
+          const input=parseFloat(temperature);
+          if(Number.isNaN(input)){
+            return '';
+          }
+          const output=convert(input);
+          const rounded=Math.round(output*1000)/1000;//保留小数点后三位
+          return rounded.toString();
+        }
+
+        class TemperatureInput  extends React.Component{
+          constructor(props){
+            super(props);
+            // this.state={temperature:''};
+            this.handleChange=this.handleChange.bind(this);
+          }
+          handleChange(e){
+            // this.setState({temperature:e.target.value});
+            this.props.onTemperatureChange(e.target.value);//此处温度改变函数onTemperatureChange由父组件传递下来
+          }
+          render(){
+            const temperature=this.props.temperature;//这里的温度值temperature由父组件传入
+            const scale=this.props.scale;
+            return(
+              <fieldset>
+                <legend>Enter temperature in {scaleNames[scale]};</legend>
+                <input type="text" value={temperature} onChange={this.handleChange}/>
+              </fieldset>
+            );
+          }
+        }
+        // 状态提升后的计算组件：根据组件属性值的不同来传递给子组件进行差别显示。
+        class Calculator extends React.Component{
+          constructor(props){
+            super(props);
+            this.state={temperature:'',scale:'c'}//这是提升后的状态保存对象
+            this.handleCelsiusChange=this.handleCelsiusChange.bind(this);
+            this.handleFahrenheitChange=this.handleFahrenheitChange.bind(this);
+          }
+          handleCelsiusChange(temperature){
+            this.setState({temperature,scale:'c'});
+          }
+          handleFahrenheitChange(temperature){
+            this.setState({temperature,scale:'f'});
+          }
+            render(){
+              const temperature=this.state.temperature;
+              let t=Number(temperature).toString();
+              if(t==="NaN"){
+                alert("请输入合法数值！");//该组件默认的温度值为'',经转换后判断为不是数值。
+              }
+              // Number.isNaN(parseFloat(temperature))?alter("bushishuzi"):alert("shi");每次改变input输入框后都会触发render进行更新，所以这个代码会不断触发提示
+              const scale=this.state.scale;
+              const fahrenheit=scale==="c"?tryConvert(temperature,toFahrenheit):temperature;
+              const celsius=scale==="f"?tryConvert(temperature,toCelsius):temperature;
+
+                return(
+                    <div>
+                        <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange}/>
+                        <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange}/>
+                        <BoilingVerdict celsius={celsius}/>
+                    </div>
+                );
+            }
+        }
+     
+        ReactDOM.render(<Calculator/>,document.querySelector("#root"));
+    </script>
+
+  </body>
+</html>
+<!--    
+    <legend>Enter temperature in {scaleNames[this.props.scale]};</legend>
+这句代码中this.props.scale缺少this是会报错的。
+-->

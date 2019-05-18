@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>所输入处理</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+     class Reservation extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                isGoing:true,
+                numberOfGuests:2
+            };
+            this.handleInputChange=this.handleInputChange.bind(this);
+        }
+        // 这里使用了同一个处理函数，来对两个不同的功能的input框进行处理，使用了name值来区分不同的输入框，从而进行不同的操作。
+        handleInputChange(e){
+            const value = e.target.type==="checkbox" ? e.target.checked : e.target.value;
+            this.setState({
+                [e.target.name] : value
+            });
+        }
+        render() {
+            return (
+                <form>
+                    <label>
+                    参与：
+                        <input type="checkbox" checked={this.state.isGoing} onChange={this.handleInputChange} name="isGoing"/>
+                    </label>
+                    <br />
+                    <label>
+                        来宾人数：
+                        <input type="number" value={this.state.numberOfGuests} onChange={this.handleInputChange} name="numberOfGuests"/>
+                    </label>
+                </form>
+
+            );
+        }
+    }
+        ReactDOM.render(<Reservation/>,document.querySelector("#root"));
+    </script>
+  </body>
+</html>
