@@ -21,3 +21,6 @@ createElement方法返回了一个对象来保存相应的节点信息，这个�
 render 方法的作用就是将虚拟 DOM 渲染成真实的 DOM
 > render方法就是利用虚拟DOM的数据对象信息，通过判断虚拟DOM类型，创建dom元素，修改属性名，递归渲染子节点等操作，将渲染结果挂载到真正的DOM上，完成页面的展示。
 
+参考文章：
+https://www.v2ex.com/amp/t/439607
+https://segmentfault.com/a/1190000014603332
