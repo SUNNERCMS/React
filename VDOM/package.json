@@ -1,0 +1,14 @@
+{
+  "name": "vdom",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "compile": "babel index.js --out-file compiled.js"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-plugin-transform-react-jsx": "^6.23.0"
+  }
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>VDOM</title>
+    <style>
+        body { margin: 0; font-size: 24; font-family: sans-serif }
+        .list { text-decoration: none }
+        .list .main { color: red }
+    </style>
+  </head>
+  <body>
+    <script src="compiled.js"></script>
+    <div id="app"></div>
+    
+    <script>
+      var app = document.getElementById('app');
+      // render是index.js中定义的渲染函数
+      render(app);
+    </script>
+  </body>
+</html>
